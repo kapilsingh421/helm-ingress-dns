@@ -1,0 +1,29 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Values.ingress.name }}
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.ingressClass }}
+    cert-manager.io/cluster-issuer: {{ .Values.certIssuer }}
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.domainName }}
+    - {{ .Values.domainName1 }}  
+    secretName: letsencrypt-prod
+  rules:
+  - host: {{ .Values.domainName }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Values.app.name }}
+          servicePort: {{ .Values.app.port }}  
+  - host: {{ .Values.domainName1 }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Values.app1.name }}
+          servicePort: {{ .Values.app1.port }}        

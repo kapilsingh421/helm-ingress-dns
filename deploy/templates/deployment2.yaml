@@ -1,0 +1,33 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: deploy1
+spec:
+  revisionHistoryLimit: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.app1.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app1.name }}
+    spec:
+      containers:
+      - name: app1
+        image: gcr.io/google-samples/hello-app:2.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.app1.port }}
+            scheme: HTTP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.app1.port }}
+            scheme: HTTP
+        ports:
+        - containerPort: 8080
+          protocol: TCP
