@@ -1,8 +1,8 @@
 ingress:
   name: app-ingress
 
-domainName: ingress.celebfie.co.in
-domainName1: ingress2.celebfie.co.in
+domainName: cloud.celebfie.co.in
+domainName1: cloud2.celebfie.co.in
 ingressClass: nginx
 certIssuer: letsencrypt-prod
 certSecret: letsencrypt-prod
@@ -13,4 +13,6 @@ app:
  
 app1:  
   name: deploy1
-  port: 8080  
+  port: 8080 
+
+ 
