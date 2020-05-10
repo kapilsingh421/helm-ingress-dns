@@ -1,1 +1,76 @@
-helm install --dry-run deploy deploy
+Helm chart to deploy application with ingress-nginx and Lets encrypt certificate (cert-manager)
+
+FOR  ingress-nginx
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm install my-release ingress-nginx/ingress-nginx
+
+
+Some useful commands  for helm 3
+
+1.helm install --generate-name .
+2.helm dep build
+3.helm upgrade icloud .
+4.helm list and helm delete
+
+
+How to use this chart 
+
+1) Clone the Repo and run get_helm.sh 
+2) Install ingress-nginx
+3) Map the Load balancer ip to both the domain 1 (cloud.celebfie.co.in)and domain2 (cloud2.clebfie.co.in)
+4).Go inside the folder deploy and Run the command "helm install nameofchart . "
+
+
+---------------------------------------
+
+Using the Nginx as Dependencies in helm chart.
+
+1)Clone the repo and run get_helm.sh
+2)Go inside the Folder deploy and uncomment line under dependencies in the Chart.yaml file.
+3)Run command "helm dep build"
+4)Go inside the folder deploy and Run the command "helm install nameofchart . "
+
+
+Shortcoming of This approach
+1). If we are using nginx as depenciences build then Lets encrypt not able to verify our domain name with domain provider like godady 
+2). In this after helm deployment we need to delete all certificate in pending.
+3.) Map load balancer IP to Domain Name and run command "helm upgrade nameofchart ."
+
+Solutions 
+1) Need to use Dns provider like Route 53 , Google DNS , cloudflare and Azure 
+
+IN this  solution we can implement a fully helm deployable chart by just changing production_issuer.yaml line like this 
+
+For Example 
+GCP
+
+ apiVersion: cert-manager.io/v1alpha2
+ kind: ClusterIssuer
+ metadata:
+   name: letsencrypt-issuer
+   namespace: cert-manager
+ spec:
+   acme:
+     server: https://acme-v02.api.letsencrypt.org/directory
+     # This will register an issuer with LetsEncrypt.  Replace
+     # with your admin email address.
+     email: myemail@gmail.com
+     privateKeySecretRef:
+       # Set privateKeySecretRef to any unused secret name.
+       name: letsencrypt-issuer
+     solvers:
+     - dns01:
+           clouddns:
+             # Set this to your GCP project-id
+             project: $PROJECT_ID
+             # Set this to the secret that we publish our service account key
+             # in the previous step.
+             serviceAccountSecretRef:
+               name: cloud-dns-key
+               key: key.json
+
+
+
+
+
