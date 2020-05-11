@@ -33,11 +33,11 @@ Using the Nginx as Dependencies in helm chart.
 
 
 Shortcoming of This approach
-1). If we are using nginx as depenciences build then Lets encrypt not able to verify our domain name with domain provider like godady 
+1). If we are using nginx as depenciences build then Lets encrypt not able to verify our domain name with domain provider like godaddy 
 2). In this after helm deployment we need to delete all certificate in pending.
 3.) Map load balancer IP to Domain Name and run command "helm upgrade nameofchart ."
 
-Solutions 
+Solution
 1) Need to use Dns provider like Route 53 , Google DNS , cloudflare and Azure 
 
 IN this  solution we can implement a fully helm deployable chart by just changing production_issuer.yaml line like this 
